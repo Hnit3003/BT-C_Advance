@@ -47,10 +47,6 @@ void kiemTraChanLe(arr *value){
             oddCount++;
         }
     }
-
-    for(int i=0; i < value->sizeArr; i++){
-        printf("\n%d\n",value->ptrEven[i]);
-    }
 }
 
 void inMang(arr *value){
