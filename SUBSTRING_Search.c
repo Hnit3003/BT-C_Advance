@@ -1,4 +1,10 @@
-
+/*---------------------------SEARCH THE SUBSTRING---------------------------------
+- This program will search for the Substring in the String and the number of times
+  they appear
+- Then the program require the String and the SubString that user want to search
+  and they must be typed exactly by keyboard
+  *NOTE: THIS PROGRAM DOESN'T USE <STRING.H> LIBRABRY
+---------------------------------------------------------------------------------*/
 
 #include<stdio.h>
 #include<stdlib.h>
