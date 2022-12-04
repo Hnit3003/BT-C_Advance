@@ -1,3 +1,7 @@
+/*---------------------------EVEN AND ODD---------------------------------
+- This program will split the array that you typed into even and ood array
+- Then the program will print both of arrays into the Terminal
+------------------------------------------------------------------------------*/
 #include<stdio.h>
 #include<stdlib.h>
 
