@@ -1,3 +1,10 @@
+/*---------------------------SORT VO IN BOX----------------------------------------
+- This program will print to terminal number of socks in the box
+- The color of each sock will be typed one by one until the box is full
+- The program require the number of socks in the box and the color of each of them,
+  they must be typed exactly by keyboard
+-----------------------------------------------------------------------------------*/
+
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
