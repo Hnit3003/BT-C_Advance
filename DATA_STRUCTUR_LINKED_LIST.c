@@ -1,4 +1,4 @@
-/*---------------------------DATA_STRUCTURE_LINKED_LIST--------------------------------------
+/*---------------------------DATA_STRUCTURE_LINKED_LIST-----------------------------------------
 - NODE_Create(int NODE_Value): Create new node for the List, this node has the *next = NULL 
                                and data = value
 
@@ -7,11 +7,19 @@
 
 - LIST_PopBack(NODE *NODE_HEAD): Delete the last node of the List
 
-- LIST_Print(NODE *NODE_HEAD): Print the data of each node of the List into the Terminal
+- LIST_Assign(NODE *NODE_HEAD): Enter the Position and the New Data of Node you want to ASSIGN 
+                                a new value, then this Node has a new value assigned
 
-- LIST_Size(NODE *NODE_HEAD): Return the Size of the List
+- LIST_Insert(NODE *NODE_HEAD: Enter the Position you want to INSERT a New Node, then enter the
+                               value for this Node. New Node is inserted to to List
 
----------------------------------------------------------------------------------------------*/
+- LIST_Erase(NODE *NODE_HEAD): ERASE the Node that you choose by enter it Position
+
+- LIST_Print(NODE *NODE_HEAD): PRINT the data of each node of the List into the Terminal
+
+- LIST_Size(NODE *NODE_HEAD): Return the SIZE of the List
+
+------------------------------------------------------------------------------------------------*/
 
 #include<stdio.h>
 #include<stdlib.h>
@@ -78,6 +86,101 @@ void LIST_PopBack(NODE *NODE_HEAD)
     }
 }
 
+void LIST_Assign(NODE *NODE_HEAD)
+{
+    int DATA_New, Position;
+    int size = LIST_Size(NODE_HEAD);
+    NODE Temp = *NODE_HEAD;
+
+    if(*NODE_HEAD == NULL)
+    {
+        printf("THE LIST IS EMPTY!! CAN NOT ASSIGN A NEW VALUE!\n");
+    }
+    else
+    {
+        printf("Enter the Position of the Node you want to ASSIGN the new value: \n");
+        scanf("%d", &Position);
+        while ((Position < 0) || (Position >= size))
+        {
+            printf("ERROR!! THERE IS NO %dth POSITION IN THE LIST.\nPlease enter again: ", Position);
+            scanf("%d", &Position);
+        }
+
+        printf("\nEnter the new value of the NODE[%d]: ", Position);
+        scanf("%d", &DATA_New);
+
+        for(int i = 0; i < Position; i++)
+        {
+            Temp = Temp->next;
+        }
+
+        Temp->data = DATA_New;
+    }
+    
+}
+
+void LIST_Insert(NODE *NODE_HEAD)
+{
+    int DATA_New, Position;
+    int size = LIST_Size(NODE_HEAD);
+
+    printf("Enter the Position of the Node you want to INSERT: \n");
+    scanf("%d", &Position);
+    while ((Position < 0) || (Position >= size))
+    {
+        printf("ERROR!! THERE IS NO %dth POSITION IN THE LIST.\nPlease enter again: ", Position);
+        scanf("%d", &Position);
+    }
+
+    printf("\nEnter the new value of the NEW NODE[%d]: ", Position);
+    scanf("%d", &DATA_New);
+
+    NODE NODE_NEW = NODE_Create(DATA_New);
+    NODE Temp = *NODE_HEAD;
+
+    for(int i=1; i<Position; i++)
+    {
+        Temp = Temp->next;
+    }
+
+    NODE_NEW->next = Temp->next;
+    Temp->next = NODE_NEW;
+}
+
+void LIST_Erase(NODE *NODE_HEAD)
+{
+    int DATA_New, Position;
+    int size = LIST_Size(NODE_HEAD);
+
+    printf("Enter the Position of the Node you want to ERASE: \n");
+    scanf("%d", &Position);
+    while ((Position < 0) || (Position >= size))
+    {
+        printf("ERROR!! THERE IS NO %dth POSITION IN THE LIST.\nPlease enter again: ", Position);
+        scanf("%d", &Position);
+    }
+
+    NODE Temp = *NODE_HEAD;
+    if(Position == 0)
+    {
+        *NODE_HEAD = Temp->next;
+    }
+    else
+    {
+        for(int i=1; i<Position; i++)
+        {
+            Temp = Temp->next;
+        }
+        if(Position == (size - 1))
+        {
+            Temp->next = NULL;
+        }else
+        {
+            Temp->next = Temp->next->next;
+        }
+    }
+}
+
 void LIST_Print(NODE *NODE_HEAD)
 {
     NODE NODE_Temp = *NODE_HEAD;
@@ -134,9 +237,15 @@ int main(int argc, char const *argv[])
     // LIST_PopBack(&LIST1);
     // LIST_PopBack(&LIST1);
     // LIST_PopBack(&LIST1);
-    LIST_PopBack(&LIST1);
+    // LIST_PopBack(&LIST1);
     LIST_Print(&LIST1);
-    printf("Size = %d\n",LIST_Size(&LIST1));
+    printf("Size of the LIST = %d\n",LIST_Size(&LIST1));
+    LIST_Assign(&LIST1);
+    LIST_Print(&LIST1);
+    LIST_Insert(&LIST1);
+    LIST_Print(&LIST1);
+    LIST_Erase(&LIST1);
+    LIST_Print(&LIST1);
+
     return 0;
 }
-
