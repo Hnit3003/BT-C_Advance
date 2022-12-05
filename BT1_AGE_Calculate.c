@@ -1,6 +1,6 @@
 /*---------------------------CALCULATE YOUR AGE---------------------------------
-- This program require your birthday and it must be entered excatly by keyboard
-- Then the program will calculate your age
+- This program require user's birthday and it must be entered excatly by keyboard
+- Then the program will calculate their age
 ------------------------------------------------------------------------------*/
 
 #include<stdio.h>
