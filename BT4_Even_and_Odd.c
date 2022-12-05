@@ -5,69 +5,90 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-typedef struct allArr{
+typedef struct ARRAY_TYPE
+{
     int sizeArr;
     int sizeEven;
     int sizeOdd;
     int *ptrArr;
     int *ptrEven;
     int *ptrOdd;
-}arr;
+}ARR;
 
-void nhapMang(arr *value){
+void ARRAY_Enter(ARR *value)
+{
+
     printf("Nhap so phan tu cua mang: ");
     scanf("%d", &(value->sizeArr));
+
+    while(value->sizeArr < 0)
+    {
+        printf("Nhap sai dinh dang kich co Mang: {%d}\nMoi nhap lai: ", value->sizeArr);
+        scanf("%d", &(value->sizeArr));
+    }
     value->ptrArr=(int*)malloc(value->sizeArr * sizeof(int));
 
-    for(int i=0; i < value->sizeArr; i++){
+    for(int i=0; i < value->sizeArr; i++)
+    {
         printf("\nArr[%d] = ",i);
         scanf("%d",&(value->ptrArr[i]));
     }
 }
 
-void kiemTraChanLe(arr *value){
+void ODD_OR_EVEN_Check(ARR *value)
+{
     value->sizeEven=0;
     value->sizeOdd=0;
-    for(int i=0; i < value->sizeArr; i++){
-        if((value->ptrArr[i] % 2)==0){
-            //value->ptrArr[i]=value->ptrEven[i];
+    int evenCount=0, oddCount=0;
+
+    for(int i=0; i < value->sizeArr; i++)
+    {
+        if((value->ptrArr[i] % 2)==0)
+        {
             (value->sizeEven)++;
         }else{
-            //value->ptrArr[i]=value->ptrOdd[i];
             (value->sizeOdd)++;
         }
     }
-
+    
     value->ptrEven=(int*)malloc(value->sizeEven * sizeof(int));
     value->ptrOdd=(int*)malloc(value->sizeOdd * sizeof(int));
-    
-    int evenCount=0, oddCount=0;
-    for(int i=0; i < value->sizeArr; i++){
-        if((value->ptrArr[i] % 2)==0){
-           value->ptrArr[i] = value->ptrEven[evenCount];
+
+    for(int i=0; i < value->sizeArr; i++)
+    {
+        if((value->ptrArr[i] % 2)==0)
+        {
+           value->ptrEven[evenCount] = value->ptrArr[i];
            evenCount++;
         }else{
-            value->ptrArr[i] = value->ptrOdd[oddCount];
+            value->ptrOdd[evenCount] = value->ptrArr[i];
             oddCount++;
         }
     }
 }
 
-void inMang(arr *value){
+void ARRAY_Print(ARR *value)
+{
     printf("\nMang co %d phan tu chan\n", value->sizeEven);
-    for(int i=0; i < value->sizeEven; i++){
+    for(int i=0; i < value->sizeEven; i++)
+    {
         printf("Even[%d] = %d\n", i, value->ptrEven[i]);
     }
+
     printf("\nMang co %d phan tu le\n", value->sizeOdd);
-    for(int i=0; i < value->sizeOdd; i++){
+    for(int i=0; i < value->sizeOdd; i++)
+    {
         printf("Even[%d] = %d\n", i, value->ptrOdd[i]);
     }
 }  
 
-int main(){
-    arr value;
-    nhapMang(&value);
-    kiemTraChanLe(&value);
-    inMang(&value);
+int main()
+{
+    ARR value;
+
+    ARRAY_Enter(&value);
+    ODD_OR_EVEN_Check(&value);
+    ARRAY_Print(&value);
+
     return 0;
 }
