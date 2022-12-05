@@ -1,5 +1,5 @@
 /*---------------------------CALCULATE YOUR AGE---------------------------------
-- This program require your birthday and it must be typed excatly by keyboard
+- This program require your birthday and it must be entered excatly by keyboard
 - Then the program will calculate your age
 ------------------------------------------------------------------------------*/
 
@@ -45,7 +45,7 @@ bool CALENDAR_Check(int day, int month, int year)
             {
                 if(day>29)
                 {
-                    printf("Invalid day of February in %d: %d-%d-%d", year, day, month, year);
+                    printf("Invalid day of February in %d (leap-year): %d-%d-%d", year, day, month, year);
                     return false;
                 }else return true;
             }else
@@ -54,14 +54,14 @@ bool CALENDAR_Check(int day, int month, int year)
                 {
                     if(day>29)
                     {
-                        printf("Invalid day of February in %d: %d-%d-%d", year, day, month, year);
+                        printf("Invalid day of February in %d (leap-year): %d-%d-%d", year, day, month, year);
                         return false;
                     }else return true;
                 }else
                 {
                     if(day > 28)
                     {
-                        printf("Invalid day of February in %d: %d-%d-%d", year, day, month, year);
+                        printf("Invalid day of February in %d (non-leap year): %d-%d-%d", year, day, month, year);
                         return false;
                     }else return true;
                 }
@@ -104,12 +104,15 @@ bool CALENDAR_Check(int day, int month, int year)
     }
 }
 
-int AGE_Calculate(int day, int month, int year){
-    int age;
-    age = THIS_YEAR-year;
-    if(month < THIS_MONTH){
+int AGE_Calculate(int day, int month, int year)
+{
+    int age = THIS_YEAR-year;
+    
+    if(month < THIS_MONTH)
+    {
         age -= 1;
-    }else if(month == THIS_MONTH)
+    }
+    else if(month == THIS_MONTH)
     {
         if(day < TODAY)
         {
@@ -121,8 +124,10 @@ int AGE_Calculate(int day, int month, int year){
 
 }
 
-int main(){
+int main()
+{
     int day=1, month=1, year=1;
+    
     printf("Type your birthday");
     do
     {
@@ -141,9 +146,6 @@ int main(){
     } while (CALENDAR_Check(day, month, year) == false);
 
     printf("\nYour Birthday: %d-%d-%d\n ", day, month, year);
-    
-    
-
     printf("Your age: %d", AGE_Calculate(day, month, year));
 
     return 0;
