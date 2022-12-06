@@ -10,11 +10,13 @@
                                    and data = NODE_Data
 
 - QUEUE_EnQueue(NODE *NODE_FRONT, int QUEUE_Capacity, int NODE_Data):
-                                    Add the New Node at the end of the Queue
+                                    ADD the New Node at the end of Queue
 
-- QUEUE_DeQueue(NODE *NODE_FRONT):  Remove the Node at the Front of the Queue
+- QUEUE_DeQueue(NODE *NODE_FRONT):  REMOVE the Node at the Front of Queue
 
 - QUEUE_Print(NODE NODE_FRONT): Print the data of each Node of the Queue into the Terminal
+
+- QUEUE_Data_Front(NODE NODE_FRONT): Return the First Data of Queue
 ----------------------------------------------------------------------------------------------------*/
 
 #include<stdio.h>
@@ -34,6 +36,7 @@ typedef struct NODE_TYPE *NODE;
 
 NODE Front = NULL, Rear = NULL;
 
+/*[3] : [Size] - Print the Queue's SIZE at present--------------------------------------------------------*/
 int QUEUE_Size(NODE NODE_FRONT)
 {
     int QUEUE_Size = 1;
@@ -79,6 +82,7 @@ NODE QUEUE_CreateNode(int NODE_Data)
     return NEW_NODE;
 }
 
+/*[1] : [EnQueue] - ADD the New Node at the end of Queue----------------------------------------------------*/
 void QUEUE_EnQueue(NODE *NODE_FRONT, int QUEUE_Capacity, int NODE_Data)
 {
     NODE NEW_NODE = QUEUE_CreateNode(NODE_Data);
@@ -106,6 +110,7 @@ void QUEUE_EnQueue(NODE *NODE_FRONT, int QUEUE_Capacity, int NODE_Data)
     Rear = NEW_NODE;
 }
 
+/*[2] : [DeQueue] - REMOVE the Node at the Front of Queue---------------------------------------------------*/
 void QUEUE_DeQueue(NODE *NODE_FRONT)
 {
     NODE Temp = *NODE_FRONT;
@@ -119,6 +124,11 @@ void QUEUE_DeQueue(NODE *NODE_FRONT)
     }
 
     Front = *NODE_FRONT;
+}
+
+int QUEUE_Data_Front(NODE NODE_FRONT)
+{
+    return NODE_FRONT->data;
 }
 
 void QUEUE_Print(NODE NODE_FRONT)
@@ -141,9 +151,11 @@ void QUEUE_Print(NODE NODE_FRONT)
 
 int main(int argc, char const *argv[])
 {
+    NODE QUEUE_1 = NULL;
     int QUEUE_Capacity;
+    int OPTION = 0;
 
-    printf("Enter the maximum capacity of the Queue: ");
+    printf("\nENTER THE MAXIMUM CAPCITY OF QUEUE: ");
     scanf("%d", &QUEUE_Capacity);
     while (QUEUE_Capacity < 0)
     {
@@ -151,19 +163,77 @@ int main(int argc, char const *argv[])
         scanf("%d", &QUEUE_Capacity);
     }
 
-    NODE QUEUE1 = NULL;
+    do
+    {
+        QUEUE_Print(QUEUE_1);
 
-    QUEUE_EnQueue(&QUEUE1, QUEUE_Capacity, 20);
-    // QUEUE_IsEmpty(QUEUE1);
-    QUEUE_EnQueue(&QUEUE1, QUEUE_Capacity, 25);
-    QUEUE_Size(QUEUE1);
-    QUEUE_IsFull(QUEUE1, QUEUE_Capacity);
-    QUEUE_EnQueue(&QUEUE1, QUEUE_Capacity, 30);
-    // QUEUE_DeQueue(&QUEUE1);
-    // QUEUE_DeQueue(&QUEUE1);
-    // QUEUE_DeQueue(&QUEUE1);
-    // QUEUE_DeQueue(&QUEUE1);
-    QUEUE_Print(QUEUE1);
+        printf("*----------------------------------------[OPTION]----------------------------------------*\n");
+        printf("[1] : [EnQueue] - ADD the New Node at the end of Queue\n");
+        printf("[2] : [DeQueue] - REMOVE the Node at the Front of Queue\n");
+        printf("[3] : [Size] - Print the Queue's SIZE at present\n");
+        printf("[4] : [Data_Front] - Print the Fisrt data of Queue\n");
+        printf("[5] : [Exit] - Complete Queue and exit program\n");
+        printf("*-----------------------------------******************-----------------------------------*\n");
+        
+
+        printf("PLEASE CHOOSE THE OPTION: ");
+        scanf("%d", &OPTION);
+        
+        while((OPTION < 0) || (OPTION > 5))
+        {
+            printf("ERROR!! Invalid option {OPTION = %d}.\nPlease choose again: ", OPTION);
+            scanf("%d", &OPTION);
+        }
+
+        printf("\n");
+        int NODE_Data = 0;
+
+        switch (OPTION)
+        {
+        case 1:
+            printf("ENTER NEW DATA TO ENQUEUE: ");
+            scanf("%d", &NODE_Data);
+            QUEUE_EnQueue(&QUEUE_1, QUEUE_Capacity, NODE_Data);
+            break;
+
+        case 2:
+            if(QUEUE_1 == NULL)
+            {
+                printf("ERROR!! ");
+            }
+            else
+            {
+                printf("Removed the Front of Queue [%d]\n", QUEUE_Data_Front(QUEUE_1));
+            } 
+            QUEUE_DeQueue(&QUEUE_1);
+            break;
+        
+        case 3:
+            if(QUEUE_1 == NULL)
+            {
+                printf("QUEUE IS EMPTY!! Size = 0\n");
+            }else
+            {
+                printf("QUEUE's SIZE = %d\n", QUEUE_Size(QUEUE_1));
+            }
+            break;
+
+        case 4:
+            if(QUEUE_1 == NULL)
+            {
+                printf("QUEUE IS EMPTY!! Front_data = NULL.\n");
+            }else
+            {
+                printf("First Data of Queue: %d\n", QUEUE_Data_Front(QUEUE_1));
+            }
+            break;
+        default:
+            break;
+        }
+                                                  
+    } while (OPTION != 5);
+
+    printf("\nEXIT...");
 
     return 0;
 }
