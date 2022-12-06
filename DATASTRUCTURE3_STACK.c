@@ -5,18 +5,18 @@
 
 - STACK_IsFull(ELMT ELEMENT_HEAD, int STACK_Capacity):
                                    Check if the Stack is Overflow or not
-
+                                   
 - ELEMENT_Create(int ELEMENT_Data): Create the new Element for the Stack, this Element has the 
                                     *next = NULL and data = ELEMENT_Data
-
+                                    
 - STACK_Push(ELMT *ELEMENT_HEAD, int STACK_Capacity, int ELEMENT_Data):
-                                    Add a New Element on the Top of Stack
-
-- STACK_Pop(ELMT *ELEMENT_HEAD):  Remove Element on the Top of Stack
+                                    ADD a New Element on the Top of Stack
+                                    
+- STACK_Pop(ELMT *ELEMENT_HEAD):  REMOVE Element on the Top of Stack
 
 - STACK_Top(ELMT ELEMENT_HEAD): Return the Element's Data on the Top
 
-- STACK_Print(ELMT ELEMENT_HEAD): Print the Data of Stact from the Top Element to the Last Element
+- STACK_Print(ELMT ELEMENT_HEAD): PRINT the Data of Stact from the Top Element to the Last Element
                                   at present
 ----------------------------------------------------------------------------------------------------*/
 
@@ -37,6 +37,7 @@ typedef struct ELEMENT_TYPE *ELMT;
 ELMT Top = NULL;
 ELMT Last = NULL;
 
+/*[3] : [Size] - RETURN the Stack's SIZE at present------------------------------------------------------*/
 int STACK_Size(ELMT ELEMENT_HEAD)
 {
     int STACK_Size = 1;
@@ -82,6 +83,7 @@ ELMT ELEMENT_Create(int ELEMENT_Data)
     return ELEMENT_New;
 }
 
+/*[1] : [Push] - ADD a New Element on the Top of Stack---------------------------------------------------*/
 void STACK_Push(ELMT *ELEMENT_HEAD, int STACK_Capacity, int ELEMENT_Data)
 {
     ELMT ELEMENT_New = ELEMENT_Create(ELEMENT_Data);
@@ -105,7 +107,7 @@ void STACK_Push(ELMT *ELEMENT_HEAD, int STACK_Capacity, int ELEMENT_Data)
         Top = ELEMENT_New;
     }
 }
-
+/*[2] : [Pop] - REMOVE Element on the Top of Stack-------------------------------------------------------*/
 void STACK_Pop(ELMT *ELEMENT_HEAD)
 {
     ELMT Temp = *ELEMENT_HEAD;
@@ -118,6 +120,7 @@ void STACK_Pop(ELMT *ELEMENT_HEAD)
     }
 }
 
+/*[4] : [Top_Data] - PRINT Element's Data on the TOP of Stack--------------------------------------------*/
 int STACK_Top(ELMT ELEMENT_HEAD)
 {
     return ELEMENT_HEAD->data;
@@ -142,8 +145,11 @@ void STACK_Print(ELMT ELEMENT_HEAD)
 
 int main(int argc, char const *argv[])
 {
+    ELMT STACK_1 = NULL;
     int STACK_Capacity;
-     printf("Enter the maximum capacity of the Stack: ");
+    int OPTION = 0;
+
+    printf("\nENTER THE MAXIMUM CAPACITY OF STACK: ");
     scanf("%d", &STACK_Capacity);
     while (STACK_Capacity < 0)
     {
@@ -151,14 +157,77 @@ int main(int argc, char const *argv[])
         scanf("%d", &STACK_Capacity);
     }
 
-    ELMT STACK1 = NULL;
-    STACK_Push(&STACK1, STACK_Capacity, 10);
-    STACK_Push(&STACK1, STACK_Capacity, 20);
-    STACK_Push(&STACK1, STACK_Capacity, 30);
-    STACK_Print(STACK1);
-    STACK_Pop(&STACK1);
-    STACK_Print(STACK1);
-    printf("Top of the STACK at the present is: %d", STACK_Top(STACK1));
+    do
+    {
+        STACK_Print(STACK_1);
+
+        printf("*----------------------------------------[OPTION]----------------------------------------*\n");
+        printf("[1] : [Push] - ADD a New Element on the Top of Stack\n");
+        printf("[2] : [Pop] - REMOVE Element on the Top of Stack\n");
+        printf("[3] : [Size] - PRINT the Stack's SIZE at present\n");
+        printf("[4] : [Top_Data] - PRINT Element's Data on the TOP of Stack\n");
+        printf("[5] : [Exit] - Complete Stack and exit program\n");
+        printf("*-----------------------------------******************-----------------------------------*\n");
+        
+
+        printf("PLEASE CHOOSE THE OPTION: ");
+        scanf("%d", &OPTION);
+        
+        while((OPTION < 0) || (OPTION > 5))
+        {
+            printf("ERROR!! Invalid option {OPTION = %d}.\nPlease choose again: ", OPTION);
+            scanf("%d", &OPTION);
+        }
+
+        printf("\n");
+        int ELEMENT_Data = 0;
+
+        switch (OPTION)
+        {
+        case 1:
+            printf("ENTER NEW DATA TO PUSH ON THE TOP: ");
+            scanf("%d", &ELEMENT_Data);
+            STACK_Push(&STACK_1, STACK_Capacity, ELEMENT_Data);
+            break;
+
+        case 2:
+            if(STACK_1 == NULL)
+            {
+                printf("ERROR!! ");
+            }
+            else
+            {
+                printf("REMOVED Element on the TOP of Stack [%d]\n", STACK_Top(STACK_1));
+            } 
+            STACK_Pop(&STACK_1);
+            break;
+        
+        case 3:
+            if(STACK_1 == NULL)
+            {
+                printf("STACK IS EMPTY!! Size = 0\n");
+            }else
+            {
+                printf("STACK's SIZE = %d\n", STACK_Size(STACK_1));
+            }
+            break;
+
+        case 4:
+            if(STACK_1 == NULL)
+            {
+                printf("STACK IS EMPTY!! Top_Data = NULL.\n");
+            }else
+            {
+                printf("STACK's TOP: %d\n", STACK_Top(STACK_1));
+            }
+            break;
+        default:
+            break;
+        }
+                                       
+    } while (OPTION != 5);
+
+    printf("\nEXIT...");
 
     return 0;
 }
