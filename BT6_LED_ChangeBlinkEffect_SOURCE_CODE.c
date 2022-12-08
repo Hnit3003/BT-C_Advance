@@ -72,12 +72,11 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-uint32_t led_timer1 = 0;
-uint32_t led_timer2 = 0;
-uint32_t timer = 0;
-uint8_t current_state = 0;
-uint8_t last_state = 0;
-uint8_t led_mode = 1;
+uint8_t STATE_Current = 0;
+uint8_t STATE_Last = 0;
+uint32_t Timer_Debouncing = 0;
+uint32_t LED_Timer = 0;
+uint8_t LED_Effect = 1;
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -100,108 +99,74 @@ uint8_t led_mode = 1;
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  current_state = HAL_GPIO_ReadPin(GPIOA, button_Pin);
-	  if(current_state != last_state)
+	  STATE_Current = HAL_GPIO_ReadPin(GPIOA, BUTTON_Pin);
+	  if(STATE_Current != STATE_Last)
 	  {
-		  if(HAL_GetTick() - timer >= 20)
+		  if(HAL_GetTick() - Timer_Debouncing >= 20)
 		  {
-			  if(current_state == 1)
+			  if(STATE_Current == 1)
 			  {
-				  HAL_GPIO_WritePin(GPIOC, led_button_Pin, 0);
-				  if(led_mode == 2)
-				  {
-					  led_mode = 0;
-				  }
-				  led_mode++;
-				  GPIOB->ODR = GPIOB->ODR & (0x00000000);
+				  HAL_GPIO_WritePin(GPIOC, LED_Button_Pin, 0);
+				  if(LED_Effect == 2)
+					  LED_Effect = 0;
+				  LED_Effect++;
+				  GPIOB->ODR = GPIOB->ODR & ~(GPIOB->ODR);
 			  }else
 			  {
-				  HAL_GPIO_WritePin(GPIOC, led_button_Pin, 1);
+				  HAL_GPIO_WritePin(GPIOC, LED_Button_Pin, 1);
 			  }
-			  timer = HAL_GetTick();
-			  last_state = current_state;
+			  Timer_Debouncing = HAL_GetTick();
+			  STATE_Last = STATE_Current;
 		  }
 	  }
 
-	  switch (led_mode){
+	  switch (LED_Effect) {
 		case 1:
-			if(HAL_GetTick() - led_timer1 >= 1000)
+			if(HAL_GetTick() - LED_Timer >= 1000)
 			{
-				led_timer1 = HAL_GetTick();
+				LED_Timer = HAL_GetTick();
 			}
-			if(HAL_GetTick() - led_timer1 < 500)
+
+			if(HAL_GetTick() - LED_Timer < 500)
 			{
-				GPIOB->ODR = GPIOB->ODR | (0x000001F8);
+				GPIOB->ODR = GPIOB->ODR | (0x000001F8); // 0000 0001 1111 1000 -> 0x01F8
 			}else
 			{
-				GPIOB->ODR = GPIOB->ODR & ~(0x000001F8);
+				GPIOB->ODR = GPIOB->ODR & ~(0x000001F8); // -> 0000 0000 0000 0000
 			}
 			break;
 
 		case 2:
-//			if(HAL_GetTick() - led_timer1 >= 600)
-//			{
-//				led_timer1 = HAL_GetTick();
-//				led_timer2 = HAL_GetTick();
-//			}
-//			if(HAL_GetTick() - led_timer1 < 300)
-//			{
-//				GPIOB->ODR = GPIOB->ODR | (0x00000008);
-//			}else
-//			{
-//				GPIOB->ODR = GPIOB->ODR | GPIOB->ODR << 1;
-//			}
-//
-//			HAL_GPIO_WritePin(GPIOB, led6_Pin, 0);
-//			HAL_GPIO_WritePin(GPIOB, led1_Pin, 1);
-//			HAL_Delay(300);
-//			HAL_GPIO_WritePin(GPIOB, led1_Pin, 0);
-//			HAL_GPIO_WritePin(GPIOB, led2_Pin, 1);
-//			HAL_Delay(300);
-//			HAL_GPIO_WritePin(GPIOB, led2_Pin, 0);
-//			HAL_GPIO_WritePin(GPIOB, led3_Pin, 1);
-//			HAL_Delay(300);
-//			HAL_GPIO_WritePin(GPIOB, led3_Pin, 0);
-//			HAL_GPIO_WritePin(GPIOB, led4_Pin, 1);
-//			HAL_Delay(300);
-//			HAL_GPIO_WritePin(GPIOB, led4_Pin, 0);
-//			HAL_GPIO_WritePin(GPIOB, led5_Pin, 1);
-//			HAL_Delay(300);
-//			HAL_GPIO_WritePin(GPIOB, led5_Pin, 0);
-//			HAL_GPIO_WritePin(GPIOB, led6_Pin, 1);
-//			HAL_Delay(300);
-
-			if(HAL_GetTick() - led_timer1 > 1800)
+			if(HAL_GetTick() - LED_Timer >= 1800)
 			{
-				led_timer1 = HAL_GetTick();
+				LED_Timer = HAL_GetTick();
 			}
-			if(HAL_GetTick() - led_timer1 < 300)
+			if(HAL_GetTick() - LED_Timer < 300)
 			{
-				HAL_GPIO_WritePin(GPIOB, led6_Pin, 0);
-				HAL_GPIO_WritePin(GPIOB, led1_Pin, 1);
-			}else if((HAL_GetTick() - led_timer1 >= 300) && (HAL_GetTick() - led_timer1 < 600))
+				HAL_GPIO_WritePin(GPIOB, LED6_Pin, 0);
+				HAL_GPIO_WritePin(GPIOB, LED1_Pin, 1);
+			}else if((HAL_GetTick() - LED_Timer >= 300) && (HAL_GetTick() - LED_Timer < 600))
 			{
-				HAL_GPIO_WritePin(GPIOB, led1_Pin, 0);
-				HAL_GPIO_WritePin(GPIOB, led2_Pin, 1);
-			}else if((HAL_GetTick() - led_timer1 >= 600) && (HAL_GetTick() - led_timer1 < 900))
+				HAL_GPIO_WritePin(GPIOB, LED1_Pin, 0);
+				HAL_GPIO_WritePin(GPIOB, LED2_Pin, 1);
+			}else if((HAL_GetTick() - LED_Timer >= 600) && (HAL_GetTick() - LED_Timer < 900))
 			{
-				HAL_GPIO_WritePin(GPIOB, led2_Pin, 0);
-				HAL_GPIO_WritePin(GPIOB, led3_Pin, 1);
-			}else if((HAL_GetTick() - led_timer1 >= 900) && (HAL_GetTick() - led_timer1 < 1200))
+				HAL_GPIO_WritePin(GPIOB, LED2_Pin, 0);
+				HAL_GPIO_WritePin(GPIOB, LED3_Pin, 1);
+			}else if((HAL_GetTick() - LED_Timer >= 900) && (HAL_GetTick() - LED_Timer < 1200))
 			{
-				HAL_GPIO_WritePin(GPIOB, led3_Pin, 0);
-				HAL_GPIO_WritePin(GPIOB, led4_Pin, 1);
-			}else if((HAL_GetTick() - led_timer1 >= 1200) && (HAL_GetTick() - led_timer1 <1600))
+				HAL_GPIO_WritePin(GPIOB, LED3_Pin, 0);
+				HAL_GPIO_WritePin(GPIOB, LED4_Pin, 1);
+			}else if((HAL_GetTick() - LED_Timer >= 1200) && (HAL_GetTick() - LED_Timer < 1600))
 			{
-				HAL_GPIO_WritePin(GPIOB, led4_Pin, 0);
-				HAL_GPIO_WritePin(GPIOB, led5_Pin, 1);
+				HAL_GPIO_WritePin(GPIOB, LED4_Pin, 0);
+				HAL_GPIO_WritePin(GPIOB, LED5_Pin, 1);
+			}else if((HAL_GetTick() - LED_Timer >= 1600) && (HAL_GetTick() - LED_Timer < 1800))
+			{
+				HAL_GPIO_WritePin(GPIOB, LED5_Pin, 0);
+				HAL_GPIO_WritePin(GPIOB, LED6_Pin, 1);
 			}
-			else if((HAL_GetTick() - led_timer1 >= 1600) && (HAL_GetTick() - led_timer1 <1800))
-			{
-				HAL_GPIO_WritePin(GPIOB, led5_Pin, 0);
-				HAL_GPIO_WritePin(GPIOB, led6_Pin, 1);
-			}
-
+			break;
 
 		default:
 			break;
@@ -261,29 +226,29 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(led_button_GPIO_Port, led_button_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(LED_Button_GPIO_Port, LED_Button_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, led1_Pin|led2_Pin|led3_Pin|led4_Pin
-                          |led5_Pin|led6_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
+                          |LED5_Pin|LED6_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : led_button_Pin */
-  GPIO_InitStruct.Pin = led_button_Pin;
+  /*Configure GPIO pin : LED_Button_Pin */
+  GPIO_InitStruct.Pin = LED_Button_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(led_button_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LED_Button_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : button_Pin */
-  GPIO_InitStruct.Pin = button_Pin;
+  /*Configure GPIO pin : BUTTON_Pin */
+  GPIO_InitStruct.Pin = BUTTON_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-  HAL_GPIO_Init(button_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(BUTTON_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : led1_Pin led2_Pin led3_Pin led4_Pin
-                           led5_Pin led6_Pin */
-  GPIO_InitStruct.Pin = led1_Pin|led2_Pin|led3_Pin|led4_Pin
-                          |led5_Pin|led6_Pin;
+  /*Configure GPIO pins : LED1_Pin LED2_Pin LED3_Pin LED4_Pin
+                           LED5_Pin LED6_Pin */
+  GPIO_InitStruct.Pin = LED1_Pin|LED2_Pin|LED3_Pin|LED4_Pin
+                          |LED5_Pin|LED6_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
