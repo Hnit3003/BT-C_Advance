@@ -8,5 +8,5 @@
   
 -----------------------------------------------------------------------------------------------------------------------------------------------------------*/
 
-VIDEO LINK FOR THIS EXERSCISE: 
+VIDEO's LINK FOR THIS EXERSCISE: 
 https://www.youtube.com/watch?v=KuB-aKvv5fE&feature=youtu.be
